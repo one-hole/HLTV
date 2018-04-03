@@ -15,7 +15,7 @@ const proxy = process.env.PROXY
 export const fetchPage = async (url: string) => cheerio.load(await rp.get(
     {
         url: url,
-        timeout: 5000,  // 5s
+        timeout: 20000,  // 15s
         proxy: proxy
     }).then((body) => {
         return body;
