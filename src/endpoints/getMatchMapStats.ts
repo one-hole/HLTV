@@ -34,7 +34,8 @@ const getMatchMapStats = async ({ id }: { id: number }): Promise<FullMatchMapSta
         fetchPage(`${HLTV_URL}/stats/matches/performance/mapstatsid/${id}/-`)
     ])
 
-    const matchPageID = Number(m$('.match-page-link').attr('href').split('/')[2])
+    const link = m$('.match-page-link').attr('href');
+    const matchPageID = link === undefined ? -1 : Number(link.split('/')[2])
     const map = getMapSlug(m$(m$('.match-info-box').contents().get(3)).text().replace(/\n| /g, ''))
     const date = Number(m$('.match-info-box .small-text span').first().attr('data-unix'))
 
