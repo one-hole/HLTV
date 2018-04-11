@@ -20,7 +20,7 @@ export const fetchPage = async (url: string) => cheerio.load(await rp.get(
     }).then((body) => {
         return body;
     }).catch(err => {
-        console.log(err)
+        console.log(err.message, err.options.url, err.options.timeout, err.options.proxy)
 }))
 
 export const toArray = (elements: Cheerio): Cheerio[] => elements.toArray().map(cheerio)

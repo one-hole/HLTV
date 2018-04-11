@@ -6,7 +6,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "start": "ts-node src/playground",
+    "dev": "ts-node src/playground",
     "doc": "typedoc --out documentation src"
   },
   "repository": "git+https://github.com/gigobyte/HLTV.git",

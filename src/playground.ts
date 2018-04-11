@@ -4,7 +4,7 @@ import HLTV from './index'
 // HLTV.getActiveThreads().then(res => console.log(res))
 // HLTV.getTeamRanking().then(res => console.log(res))
 // HLTV.getTeamRankingDates().then(res => console.log(res))
-// HLTV.connectToScorebot({id: 2320741,
+// HLTV.connectToScorebot({id: 2321695,
 //     onConnect: () => {
 //         console.log('connected')
 //     },
@@ -30,3 +30,10 @@ HLTV.getResults()
     .then((results) => {
         console.log(results)
     });
+
+process
+    .on('unhandledRejection', (reason, p) => {
+        console.log('##########################################')
+        console.error(reason, 'Unhandled Rejection at Promise', p)
+        console.log('##########################################')
+    })
