@@ -16,7 +16,7 @@ const getResults = async ({ pages=1 } = {}): Promise<MatchResult[]> => {
     for (let i = 0; i < pages; i++) {
         const $ = await fetchPage(`${HLTV_URL}/results?offset=${i*100}`)
 
-        matches = matches.concat(toArray($('.result-con .a-reset')).map(matchEl => {
+        matches = matches.concat(toArray($('.results-holder .results-all .result-con .a-reset')).map(matchEl => {
             const id = Number(matchEl.attr('href').split('/')[2])
             const stars = matchEl.find('.stars i').length
 
