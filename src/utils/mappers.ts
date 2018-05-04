@@ -13,16 +13,15 @@ const rp = require('request-promise');
 const proxy = process.env.PROXY
 
 export const fetchPage = async (url: string) => {
-    let html
-    try {
-        html = await rp.get({
-            url: url,
-            timeout: 20000,  // 15s
-            proxy: proxy
-        })
-    } catch (err) {
+    let html = await rp.get({
+        url: url,
+        timeout: 20000,  // 15s
+        proxy: proxy
+    }).then((body) => {
+        return body;
+    }).catch(err => {
         console.log(err.message, err.options.url, err.options.timeout, err.options.proxy)
-    }
+    })
     if (html === undefined)
         throw new Error('Html is undefined')
     return cheerio.load(html)
