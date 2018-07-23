@@ -1,5 +1,6 @@
 import 'babel-polyfill'
 import * as cheerio from 'cheerio'
+// import * as fetch from 'isomorphic-fetch'
 import Team from '../models/Team'
 import Veto from '../models/Veto'
 import Player from '../models/Player'
@@ -55,9 +56,13 @@ export const getMatchPlayer = (playerEl: Cheerio): Player => {
     }
 }
 
-export const getMatchFormatAndMap = (mapText: string): {map?: MapSlug, format: string} => {
+export const getMatchFormatAndMap = (mapText: string): {map?: MapSlug, format?: string} => {
     if (mapText && !mapText.includes('bo')) {
         return { map: mapText as MapSlug, format: 'bo1'}
+    }
+
+    if (!mapText) {
+        return {}
     }
 
     return { format: mapText }

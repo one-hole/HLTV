@@ -1,5 +1,6 @@
 import MatchResult from '../models/MatchResult';
-declare const getResults: ({ pages }?: {
+import HLTVConfig from '../models/HLTVConfig';
+declare const getResults: (config: HLTVConfig) => ({ pages }?: {
     pages?: number;
 }) => Promise<MatchResult[]>;
 export default getResults;

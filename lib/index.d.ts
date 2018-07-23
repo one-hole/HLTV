@@ -1,4 +1,7 @@
-declare const HLTV: {
+import HLTVConfig from './models/HLTVConfig';
+export declare class HLTVFactory {
+    private config;
+    constructor(config: HLTVConfig);
     connectToScorebot: ({ id, onScoreboardUpdate, onLogUpdate, onConnect, onDisconnect }: {
         id: number;
         onScoreboardUpdate?: ((data: ScoreboardUpdate) => any) | undefined;
@@ -26,10 +29,11 @@ declare const HLTV: {
     getStreams: ({ loadLinks }?: {
         loadLinks?: boolean | undefined;
     }) => Promise<FullStream[]>;
-    getTeamRanking: ({ year, month, day }?: {
+    getTeamRanking: ({ year, month, day, country }?: {
         year?: string;
         month?: string;
         day?: string;
+        country?: string;
     }) => Promise<TeamRanking[]>;
     getTeam: ({ id }: {
         id: number;
@@ -40,9 +44,11 @@ declare const HLTV: {
     getPlayer: ({ id }: {
         id: number;
     }) => Promise<FullPlayer>;
-};
-export default HLTV;
-export { HLTV };
+    createInstance(config: HLTVConfig): HLTVFactory;
+}
+declare const hltvInstance: HLTVFactory;
+export default hltvInstance;
+export { hltvInstance as HLTV };
 import FullMatch from './models/FullMatch';
 import FullMatchMapStats from './models/FullMatchMapStats';
 import FullStream from './models/FullStream';

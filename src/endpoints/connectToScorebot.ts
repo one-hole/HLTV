@@ -1,8 +1,8 @@
 import * as io from 'socket.io-client'
 import ScoreboardUpdate from '../models/ScoreboardUpdate'
 import LogUpdate from '../models/LogUpdate'
-import { HLTV_URL } from '../utils/constants'
 import { fetchPage } from '../utils/mappers'
+import HLTVConfig from '../models/HLTVConfig'
 
 export type ConnectToScorebotParams = {
     id: number,
@@ -12,8 +12,8 @@ export type ConnectToScorebotParams = {
     onDisconnect?: () => any
 }
 
-const connectToScorebot = async ({ id, onScoreboardUpdate, onLogUpdate, onConnect, onDisconnect }: ConnectToScorebotParams) => {
-    const $ = await fetchPage(`${HLTV_URL}/matches/${id}/-`)
+const connectToScorebot = (config: HLTVConfig) => async ({ id, onScoreboardUpdate, onLogUpdate, onConnect, onDisconnect }: ConnectToScorebotParams) => {
+    const $ = await fetchPage(`${config.hltvUrl}/matches/${id}/-`)
     const url = $('#scoreboardElement').attr('data-scorebot-url')
     const matchId = $('#scoreboardElement').attr('data-scorebot-id')
 
@@ -24,11 +24,7 @@ const connectToScorebot = async ({ id, onScoreboardUpdate, onLogUpdate, onConnec
             onConnect()
         }
 
-        const listid = JSON.stringify({
-            token: '',
-            listId: matchId
-        })
-        socket.emit('readyForMatch', listid)
+        socket.emit('readyForMatch', `{"token":"","listId":"${matchId}"}`)
 
         socket.on('scoreboard', (data) => {
             if (onScoreboardUpdate) {

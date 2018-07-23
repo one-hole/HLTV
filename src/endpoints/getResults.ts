@@ -1,11 +1,12 @@
 import MatchResult from '../models/MatchResult'
 import Event from '../models/Event'
 import Team from '../models/Team'
+import MapSlug from '../enums/MapSlug'
 import * as E from '../utils/parsing'
-import { HLTV_URL } from '../utils/constants'
+import HLTVConfig from '../models/HLTVConfig'
 import { fetchPage, toArray, getMatchFormatAndMap } from '../utils/mappers'
 
-const getResults = async ({ pages=1 } = {}): Promise<MatchResult[]> => {
+const getResults = (config: HLTVConfig) => async ({ pages=1 } = {}): Promise<MatchResult[]> => {
     if (pages < 1) {
         console.error('getLatestResults: pages cannot be less than 1')
         return []
@@ -14,9 +15,9 @@ const getResults = async ({ pages=1 } = {}): Promise<MatchResult[]> => {
     let matches = [] as MatchResult[]
 
     for (let i = 0; i < pages; i++) {
-        const $ = await fetchPage(`${HLTV_URL}/results?offset=${i*100}`)
+        const $ = await fetchPage(`${config.hltvUrl}/results?offset=${i*100}`)
 
-        matches = matches.concat(toArray($('.results-holder .results-all .result-con .a-reset')).map(matchEl => {
+        matches = matches.concat(toArray($('.results-holder > .results-all > .results-sublist .result-con .a-reset')).map(matchEl => {
             const id = Number(matchEl.attr('href').split('/')[2])
             const stars = matchEl.find('.stars i').length
 
@@ -31,7 +32,7 @@ const getResults = async ({ pages=1 } = {}): Promise<MatchResult[]> => {
             }
 
             const result = matchEl.find('.result-score').text()
-            const { map, format } = getMatchFormatAndMap(matchEl.find('.map-text').text())
+            const { map, format } = getMatchFormatAndMap(matchEl.find('.map-text').text()) as { map: MapSlug | undefined, format: string }
 
             const event: Event = {
                 name: matchEl.find('.event-logo').attr('alt'),

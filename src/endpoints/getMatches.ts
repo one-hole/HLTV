@@ -4,11 +4,11 @@ import Event from '../models/Event'
 import Team from '../models/Team'
 import MapSlug from '../enums/MapSlug'
 import * as E from '../utils/parsing'
-import { HLTV_URL } from '../utils/constants'
+import HLTVConfig from '../models/HLTVConfig'
 import { fetchPage, toArray, getMatchFormatAndMap } from '../utils/mappers'
 
-const getMatches = async (): Promise<(UpcomingMatch | LiveMatch)[]> => {
-    const $ = await fetchPage(`${HLTV_URL}/matches`)
+const getMatches = (config: HLTVConfig) => async (): Promise<(UpcomingMatch | LiveMatch)[]> => {
+    const $ = await fetchPage(`${config.hltvUrl}/matches`)
 
     const liveMatches: LiveMatch[] = toArray($('.live-match .a-reset')).map(matchEl => {
         const id = Number(matchEl.attr('href').split('/')[2])
@@ -39,7 +39,7 @@ const getMatches = async (): Promise<(UpcomingMatch | LiveMatch)[]> => {
     const upcomingMatches: UpcomingMatch[] = toArray($('.upcoming-match')).map(matchEl => {
         const id = Number(matchEl.attr('href').split('/')[2])
         const date = Number(matchEl.find('div.time').attr('data-unix')) || undefined
-        const title = matchEl.find('.placeholder-text-cell').text()
+        const title = matchEl.find('.placeholder-text-cell').text() || undefined
         const stars = matchEl.find('.stars i').length
 
         const { map, format } = getMatchFormatAndMap(matchEl.find('.map-text').text())
@@ -56,8 +56,7 @@ const getMatches = async (): Promise<(UpcomingMatch | LiveMatch)[]> => {
 
             team2 = {
                 name: matchEl.find('div.team').last().text(),
-                id: Number(E.popSlashSource(matchEl.find('img.logo').last())) || undefined
-
+                id: matchEl.find('img.logo').get(1) ? Number(E.popSlashSource($(matchEl.find('img.logo').last()))) : undefined
             }
             event = {
                 name: matchEl.find('.event-logo').attr('alt'),

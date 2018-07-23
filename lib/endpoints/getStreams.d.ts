@@ -1,5 +1,6 @@
 import FullStream from '../models/FullStream';
-declare const getStreams: ({ loadLinks }?: {
+import HLTVConfig from '../models/HLTVConfig';
+declare const getStreams: (config: HLTVConfig) => ({ loadLinks }?: {
     loadLinks?: boolean | undefined;
 }) => Promise<FullStream[]>;
 export default getStreams;

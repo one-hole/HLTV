@@ -1,5 +1,6 @@
 import ScoreboardUpdate from '../models/ScoreboardUpdate';
 import LogUpdate from '../models/LogUpdate';
+import HLTVConfig from '../models/HLTVConfig';
 export declare type ConnectToScorebotParams = {
     id: number;
     onScoreboardUpdate?: (data: ScoreboardUpdate) => any;
@@ -7,5 +8,5 @@ export declare type ConnectToScorebotParams = {
     onConnect?: () => any;
     onDisconnect?: () => any;
 };
-declare const connectToScorebot: ({ id, onScoreboardUpdate, onLogUpdate, onConnect, onDisconnect }: ConnectToScorebotParams) => Promise<void>;
+declare const connectToScorebot: (config: HLTVConfig) => ({ id, onScoreboardUpdate, onLogUpdate, onConnect, onDisconnect }: ConnectToScorebotParams) => Promise<void>;
 export default connectToScorebot;

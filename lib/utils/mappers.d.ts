@@ -13,7 +13,7 @@ export declare const mapVetoElementToModel: (el: Cheerio, team1: Team, team2: Te
 export declare const getMatchPlayer: (playerEl: Cheerio) => Player;
 export declare const getMatchFormatAndMap: (mapText: string) => {
     map?: MapSlug | undefined;
-    format: string;
+    format?: string | undefined;
 };
 export declare const mapRoundElementToModel: () => (el: Cheerio) => WeakRoundOutcome;
 export declare const getMapsStatistics: (source: string) => {

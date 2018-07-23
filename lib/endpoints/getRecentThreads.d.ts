@@ -1,3 +1,4 @@
 import Thread from '../models/Thread';
-declare const getRecentThreads: () => Promise<Thread[]>;
+import HLTVConfig from '../models/HLTVConfig';
+declare const getRecentThreads: (config: HLTVConfig) => () => Promise<Thread[]>;
 export default getRecentThreads;

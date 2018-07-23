@@ -1,5 +1,6 @@
 import FullTeam from '../models/FullTeam';
-declare const getTeam: ({ id }: {
+import HLTVConfig from '../models/HLTVConfig';
+declare const getTeam: (config: HLTVConfig) => ({ id }: {
     id: number;
 }) => Promise<FullTeam>;
 export default getTeam;

@@ -1,5 +1,6 @@
 import FullTeamStats from '../models/FullTeamStats';
-declare const getTeamStats: ({ id }: {
+import HLTVConfig from '../models/HLTVConfig';
+declare const getTeamStats: (config: HLTVConfig) => ({ id }: {
     id: number;
 }) => Promise<FullTeamStats>;
 export default getTeamStats;

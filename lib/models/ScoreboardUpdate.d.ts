@@ -7,13 +7,17 @@ export interface ScoreboardPlayer {
     death: number;
     assists: number;
     alive: boolean;
-    rating: number;
     money: number;
     damagePrRound: number;
+    hp: number;
+    kevlar: boolean;
+    helmet: boolean;
+    nick: string;
 }
 export interface ScoreboardRound {
     type: WinType;
     roundOrdinal: number;
+    survivingPlayers: number;
 }
 export interface ScoreboardUpdate {
     TERRORIST: ScoreboardPlayer[];
@@ -35,5 +39,6 @@ export interface ScoreboardUpdate {
     terroristScore: number;
     ctTeamId: number;
     tTeamId: number;
+    frozen: boolean;
 }
 export default ScoreboardUpdate;

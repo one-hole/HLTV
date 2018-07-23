@@ -6,11 +6,11 @@ import Stream from '../models/Stream'
 import Team from '../models/Team'
 import Highlight from '../models/Highlight'
 import * as E from '../utils/parsing'
-import { HLTV_URL } from '../utils/constants'
+import HLTVConfig from '../models/HLTVConfig'
 import { fetchPage, toArray, mapVetoElementToModel, getMapSlug, getMatchPlayer } from '../utils/mappers'
 
-const getMatch = async ({ id }: { id: number }): Promise<FullMatch> => {
-    const $ = await fetchPage(`${HLTV_URL}/matches/${id}/-`)
+const getMatch = (config: HLTVConfig) => async ({ id }: { id: number }): Promise<FullMatch> => {
+    const $ = await fetchPage(`${config.hltvUrl}/matches/${id}/-`)
 
     const title = $('.timeAndEvent .text').text() === ' ' ? undefined : $('.timeAndEvent .text').text()
     const date = Number($('.timeAndEvent .date').attr('data-unix'))
@@ -39,7 +39,7 @@ const getMatch = async ({ id }: { id: number }): Promise<FullMatch> => {
     }
 
     const maps: MapResult[] = toArray($('.mapholder')).map((mapEl) => {
-        const result = mapEl.find('.results');
+        const result = mapEl.find('.results span');
         const curSecondHalf = result.find('.t').length === 1
         const t_first = result.find('.t').first().text();
         const ct_first = result.find('.ct').first().text();
@@ -67,7 +67,7 @@ const getMatch = async ({ id }: { id: number }): Promise<FullMatch> => {
         team2: toArray($('div.players').last().find('tr').last().find('.flagAlign')).map(getMatchPlayer)
     }
 
-    const streams: Stream[] = toArray($('.stream-box')).filter(E.hasChild('.flagAlign')).map(streamEl => ({
+    const streams: Stream[] = toArray($('.stream-box-embed')).filter(E.hasChild('.flagAlign')).map(streamEl => ({
         name: streamEl.find('.flagAlign').text(),
         link: streamEl.attr('data-stream-embed'),
         viewers: Number(streamEl.find('.viewers').text())

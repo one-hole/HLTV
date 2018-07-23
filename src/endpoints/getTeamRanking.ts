@@ -1,10 +1,17 @@
 import TeamRanking from '../models/TeamRanking'
 import Team from '../models/Team'
-import { HLTV_URL } from '../utils/constants'
+import HLTVConfig from '../models/HLTVConfig'
 import { fetchPage, toArray } from '../utils/mappers'
 
-const getTeamRanking = async ({ year='', month='', day='' } = {}): Promise<TeamRanking[]> => {
-    const $ = await fetchPage(`${HLTV_URL}/ranking/teams/${year}/${month}/${day}`)
+const getTeamRanking = (config: HLTVConfig) => async ({ year='', month='', day='', country='' } = {}): Promise<TeamRanking[]> => {
+    let $ = await fetchPage(`${config.hltvUrl}/ranking/teams/${year}/${month}/${day}`)
+
+    if ((!year || !month || !day) && country) {
+        const redirectedLink = $('.ranking-country > a').first().attr('href')
+        const countryRankingLink = redirectedLink.split('/').slice(0, -1).concat([country]).join('/')
+
+        $ = await fetchPage(`${config.hltvUrl}${countryRankingLink}`)
+    }
 
     const teams = toArray($('.ranked-team')).map(teamEl => {
         const points = Number(teamEl.find('.points').text().replace(/\(|\)/g, '').split(' ')[0])
@@ -16,9 +23,10 @@ const getTeamRanking = async ({ year='', month='', day='' } = {}): Promise<TeamR
         }
 
         const changeText = teamEl.find('.change').text()
-        const change = changeText === '-' ? 0 : Number(changeText)
+        const isNew = changeText === 'New'
+        const change = changeText === '-' || isNew ? 0 : Number(changeText)
 
-        return { points, place, team, change }
+        return { points, place, team, change, isNew }
     })
 
     return teams

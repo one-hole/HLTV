@@ -4,5 +4,6 @@ interface TeamRanking {
     readonly points: number;
     readonly place: number;
     readonly change: number;
+    readonly isNew: boolean;
 }
 export default TeamRanking;

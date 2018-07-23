@@ -2,13 +2,11 @@
 [![devDependencies Status](https://david-dm.org/gigobyte/hltv/dev-status.svg)](https://david-dm.org/gigobyte/hltv?type=dev)
 
 <h1 align="center">
-  <img src="https://www.hltv.org/img/static/TopLogo2x.png" alt="pyarray logo" width="200">
+  <img src="https://www.hltv.org/img/static/TopLogo2x.png" alt="HLTV logo" width="200">
   <br>
   The unofficial HLTV Node.js API
   <br>
 </h1>
-
-:star: This package supports the new HLTV that was deployed on [May 22nd](https://www.hltv.org/news/20530/a-new-beginning-for-hltvorg).
 
 Table of contents
 
@@ -39,6 +37,16 @@ import HLTV from 'hltv'
 // Or if you're stuck with CommonJS
 const { HLTV } = require('hltv')
 ```
+
+#### Configuration
+
+You can create an instance of HLTV with a custom config.
+
+```javascript
+const myHLTV = HLTV.createInstance({hltvUrl: 'my-proxy-server'})
+```
+
+**[See config schema](https://github.com/gigobyte/HLTV/blob/master/src/models/HLTVConfig.ts)**
 
 ## API
 
@@ -176,9 +184,12 @@ Option | Type | Default Value | Description |
 | year | string | - | - |
 | month | string | - | Must be lowercase and in MMMM format |
 | day | string | - | - |
+| country | string | - | Must be capitalized (`'Brazil'`, `'France'` etc)
 
 ```javascript
 // If you don't provide a filter the latest ranking will be parsed
+HLTV.getTeamRanking()
+HLTV.getTeamRanking({country: 'Thailand'})
 HLTV.getTeamRanking({year: '2017', month: 'may', day: '29'}).then((res) => {
   ...
 })
@@ -244,6 +255,8 @@ HLTV.getPlayer({id: 6137}).then(res => {
 #### connectToScorebot
 
 Presents an interface to receive data when the HLTV scorebot updates
+
+**NOTE: While `connectToScorebot` returns a Promise, the promise will never resolve. Instead you should pass the callbacks described below.**
 
 Option | Type | Default Value | Description |
 :---:|:---:|:---:|:---:|
