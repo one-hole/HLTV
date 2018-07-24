@@ -40,19 +40,10 @@ const getMatch = (config: HLTVConfig) => async ({ id }: { id: number }): Promise
 
     const maps: MapResult[] = toArray($('.mapholder')).map((mapEl) => {
         const result = mapEl.find('.results span');
-        const curSecondHalf = result.find('.t').length === 1
-        const t_first = result.find('.t').first().text();
-        const ct_first = result.find('.ct').first().text();
-        const t_second = curSecondHalf ? 0 : result.find('.t').last().text();
-        const ct_second = curSecondHalf ? 0 : result.find('.ct').last().text();
         return {
             name: getMapSlug(mapEl.find('.mapname').text()),
             result: result.text(),
-            first_left: result.children().first().next().next().next().next().attr('class'),
-            t_first: t_first,
-            ct_first: ct_first,
-            t_second: t_second,
-            ct_second: ct_second
+            first_left: result.next().next().next().next().attr('class')
         }
     });
 
