@@ -28,6 +28,8 @@ Table of contents
 
 ## Installation
 
+`npm run build`
+
 [![NPM](https://nodei.co/npm/hltv.png)](https://nodei.co/npm/hltv/)
 
 ## Usage
