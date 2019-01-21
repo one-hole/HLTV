@@ -14,17 +14,22 @@ export type ConnectToScorebotParams = {
 
 const connectToScorebot = (config: HLTVConfig) => async ({ id, onScoreboardUpdate, onLogUpdate, onConnect, onDisconnect }: ConnectToScorebotParams) => {
     const $ = await fetchPage(`${config.hltvUrl}/matches/${id}/-`)
-    const url = $('#scoreboardElement').attr('data-scorebot-url')
+    const url = $('#scoreboardElement').attr('data-scorebot-url').split(',').pop()!
     const matchId = $('#scoreboardElement').attr('data-scorebot-id')
 
     const socket = io.connect(url)
+
+    const initObject = JSON.stringify({
+        token: '',
+        listId: matchId
+    })
 
     socket.on('connect', () => {
         if (onConnect) {
             onConnect()
         }
 
-        socket.emit('readyForMatch', `{"token":"","listId":"${matchId}"}`)
+        socket.emit('readyForMatch', initObject)
 
         socket.on('scoreboard', (data) => {
             if (onScoreboardUpdate) {
@@ -40,7 +45,7 @@ const connectToScorebot = (config: HLTVConfig) => async ({ id, onScoreboardUpdat
     })
 
     socket.on('reconnect', () => {
-        socket.emit('readyForMatch', matchId)
+        socket.emit('readyForMatch', initObject)
     })
 
     socket.on('disconnect', () => {

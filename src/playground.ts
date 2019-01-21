@@ -19,9 +19,17 @@ import HLTV from './index'
 //     console.log(err)
 // })
 
-HLTV.getMatch({id: 2324845}).then((res) => {
-    console.log(res)
+HLTV.connectToScorebot({id: 2330348, onScoreboardUpdate: (data) => {
+        console.log('scoreboard update!')
+        console.dir(data, { depth: null })
+    }, onLogUpdate: (data) => {
+        console.log('log update!')
+        console.dir(data, { depth: null })
+    }
 })
+// HLTV.getMatch({id: 2324845}).then((res) => {
+//     console.log(res)
+// })
 // HLTV.getResults()
 //     .then((results) => {
 //         console.log(JSON.stringify(results.slice(0, 3)))
