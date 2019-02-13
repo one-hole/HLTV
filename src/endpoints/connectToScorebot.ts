@@ -4,6 +4,15 @@ import LogUpdate from '../models/LogUpdate'
 import { fetchPage } from '../utils/mappers'
 import HLTVConfig from '../models/HLTVConfig'
 
+
+import * as url from 'url'
+import { HttpsProxyAgent } from 'https-proxy-agent'
+
+var proxy = "http://lum-customer-hl_bfa58f09-zone-csgo_proxy-country-us:ukbbyolfwhwk@zproxy.lum-superproxy.io:22225"
+var options = url.parse(proxy)
+var agent = new HttpsProxyAgent(options)
+
+
 export type ConnectToScorebotParams = {
     id: number,
     onScoreboardUpdate?: (data: ScoreboardUpdate) => any,
@@ -17,7 +26,7 @@ const connectToScorebot = (config: HLTVConfig) => async ({ id, onScoreboardUpdat
     const url = $('#scoreboardElement').attr('data-scorebot-url').split(',').pop()!
     const matchId = $('#scoreboardElement').attr('data-scorebot-id')
 
-    const socket = io.connect(url)
+    const socket = io.connect(url, {agent: agent})
 
     const initObject = JSON.stringify({
         token: '',
